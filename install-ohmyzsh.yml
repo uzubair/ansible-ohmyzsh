@@ -1,0 +1,25 @@
+# This playbook makes zsh default shell and setup ohmyzsh with the default theme
+---
+- name: Setup ZSH and ohmyzsh
+
+  hosts: all
+
+  remote_user: root
+
+  tasks:
+    - name: Setup | Prerequisities
+      apt: name={{item}} state={{latest}} update_cache=yes
+      with_items:
+        - git
+        - git-core
+        - zsh
+
+    - name: Download | Clone ohmyzsh repo
+      git:
+        - repo: https://github.com/robbyrussell/oh-my-zsh.git
+        - dest: /home/ubuntu/.oh-my-zsh
+
+    - name: Default Shell | Make zsh default shell
+      user:
+        name: ubuntu
+        shell: /bin/zsh
